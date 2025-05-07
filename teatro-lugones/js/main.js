@@ -1,0 +1,187 @@
+// DOM Elements
+const hero = document.getElementById('hero');
+const about = document.getElementById('about');
+const schedule = document.getElementById('schedule');
+const footer = document.getElementById('footer');
+const backToTop = document.querySelector('.back-to-top');
+const navDots = document.querySelectorAll('.nav-dot');
+const sections = [hero, about, schedule, footer];
+
+// Lazy loading for images
+document.addEventListener('DOMContentLoaded', function() {
+    // Load hero background image
+    const heroSection = document.querySelector('.hero-section');
+    const heroImage = new Image();
+    heroImage.src = 'images/teatro-hero.jpg';
+    heroImage.onload = function() {
+        heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('${heroImage.src}')`;
+        heroSection.classList.add('loaded');
+    };
+
+    // Initialize animations
+    initAnimations();
+    
+    // Initialize scroll events
+    initScrollEvents();
+    
+    // Initialize navigation dots
+    initNavDots();
+});
+
+// Initialize animations
+function initAnimations() {
+    // Add fade-in class to elements
+    const fadeElements = document.querySelectorAll('.about-content, .schedule-content, .footer-content');
+    fadeElements.forEach(element => {
+        element.classList.add('fade-in');
+    });
+    
+    // Check if elements are in viewport on page load
+    checkFadeElements();
+}
+
+// Initialize scroll events
+function initScrollEvents() {
+    // Show/hide back to top button
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > window.innerHeight / 2) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+        
+        // Check for fade-in elements
+        checkFadeElements();
+        
+        // Update active nav dot
+        updateActiveDot();
+    });
+    
+    // Back to top button click
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// Initialize navigation dots
+function initNavDots() {
+    navDots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+            window.scrollTo({
+                top: sections[index].offsetTop,
+                behavior: 'smooth'
+            });
+        });
+    });
+}
+
+// Check if elements are in viewport and add visible class
+function checkFadeElements() {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    fadeElements.forEach(element => {
+        if (isElementInViewport(element)) {
+            element.classList.add('visible');
+        }
+    });
+}
+
+// Update active navigation dot based on scroll position
+function updateActiveDot() {
+    const scrollPosition = window.scrollY;
+    
+    sections.forEach((section, index) => {
+        const sectionTop = section.offsetTop - window.innerHeight / 3;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            navDots.forEach(dot => dot.classList.remove('active'));
+            navDots[index].classList.add('active');
+        }
+    });
+}
+
+// Helper function to check if element is in viewport
+function isElementInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8 &&
+        rect.bottom >= 0
+    );
+}
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// Add animation delay to scroll indicator
+const scrollIndicator = document.querySelector('.scroll-indicator');
+if (scrollIndicator) {
+    setTimeout(() => {
+        scrollIndicator.style.opacity = '1';
+    }, 1000);
+}
+
+// Mobile touch events for better scrolling experience
+let touchStartY = 0;
+let touchEndY = 0;
+
+document.addEventListener('touchstart', function(e) {
+    touchStartY = e.touches[0].clientY;
+}, false);
+
+document.addEventListener('touchend', function(e) {
+    touchEndY = e.changedTouches[0].clientY;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    const diff = touchStartY - touchEndY;
+    const threshold = 100; // Minimum distance for swipe
+    
+    if (Math.abs(diff) < threshold) return;
+    
+    const scrollPosition = window.scrollY;
+    let targetSection = null;
+    
+    // Find current section
+    for (let i = 0; i < sections.length; i++) {
+        const sectionTop = sections[i].offsetTop - 100;
+        const sectionBottom = sectionTop + sections[i].offsetHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            // Swipe up (next section)
+            if (diff > 0 && i < sections.length - 1) {
+                targetSection = sections[i + 1];
+                break;
+            }
+            // Swipe down (previous section)
+            else if (diff < 0 && i > 0) {
+                targetSection = sections[i - 1];
+                break;
+            }
+        }
+    }
+    
+    if (targetSection) {
+        window.scrollTo({
+            top: targetSection.offsetTop,
+            behavior: 'smooth'
+        });
+    }
+}
