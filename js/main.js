@@ -4,7 +4,7 @@ const about = document.getElementById('about');
 const schedule = document.getElementById('schedule');
 const footer = document.getElementById('footer');
 const backToTop = document.querySelector('.back-to-top');
-const navDots = document.querySelectorAll('.nav-dot');
+// Removed navDots reference
 const sections = [hero, about, schedule, footer];
 
 // Lazy loading for images
@@ -24,8 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize scroll events
     initScrollEvents();
     
-    // Initialize navigation dots
-    initNavDots();
+    // Navigation dots initialization removed
 });
 
 // Initialize animations
@@ -53,8 +52,8 @@ function initScrollEvents() {
         // Check for fade-in elements
         checkFadeElements();
         
-        // Update active nav dot
-        updateActiveDot();
+        // Update active nav dot - Removed
+        // updateActiveDot();
     });
     
     // Back to top button click
@@ -66,7 +65,8 @@ function initScrollEvents() {
     });
 }
 
-// Initialize navigation dots
+// Initialize navigation dots - Removed
+/*
 function initNavDots() {
     navDots.forEach((dot, index) => {
         dot.addEventListener('click', function() {
@@ -77,6 +77,7 @@ function initNavDots() {
         });
     });
 }
+*/
 
 // Check if elements are in viewport and add visible class
 function checkFadeElements() {
@@ -88,7 +89,8 @@ function checkFadeElements() {
     });
 }
 
-// Update active navigation dot based on scroll position
+// Update active navigation dot based on scroll position - Removed
+/*
 function updateActiveDot() {
     const scrollPosition = window.scrollY;
     
@@ -102,6 +104,7 @@ function updateActiveDot() {
         }
     });
 }
+*/
 
 // Helper function to check if element is in viewport
 function isElementInViewport(element) {
@@ -150,7 +153,12 @@ document.addEventListener('touchend', function(e) {
     handleSwipe();
 }, false);
 
+// Disabled automatic scrolling functionality
 function handleSwipe() {
+    // Automatic scrolling disabled
+    return;
+    
+    /*
     const diff = touchStartY - touchEndY;
     const threshold = 100; // Minimum distance for swipe
     
@@ -184,4 +192,5 @@ function handleSwipe() {
             behavior: 'smooth'
         });
     }
+    */
 }
