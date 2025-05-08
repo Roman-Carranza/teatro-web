@@ -115,7 +115,8 @@ function isElementInViewport(element) {
     );
 }
 
-// Smooth scroll for anchor links
+// Smooth scroll for anchor links - Disabled
+/*
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -131,13 +132,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+*/
 
 // Add animation delay to scroll indicator
 const scrollIndicator = document.querySelector('.scroll-indicator');
 if (scrollIndicator) {
+    // Ocultar el indicador de desplazamiento para evitar que invite al usuario a desplazarse
+    scrollIndicator.style.display = 'none';
+    /*
     setTimeout(() => {
         scrollIndicator.style.opacity = '1';
     }, 1000);
+    */
 }
 
 // Mobile touch events for better scrolling experience
