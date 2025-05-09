@@ -4,6 +4,7 @@ const about = document.getElementById('about');
 const schedule = document.getElementById('schedule');
 const footer = document.getElementById('footer');
 const backToTop = document.querySelector('.back-to-top');
+const scrollDownIndicator = document.querySelector('.scroll-down-indicator');
 // Removed navDots reference
 const sections = [hero, about, schedule, footer];
 
@@ -63,6 +64,16 @@ function initScrollEvents() {
             behavior: 'smooth'
         });
     });
+    
+    // Scroll down indicator click
+    if (scrollDownIndicator) {
+        scrollDownIndicator.addEventListener('click', function() {
+            window.scrollTo({
+                top: about.offsetTop,
+                behavior: 'smooth'
+            });
+        });
+    }
 }
 
 // Initialize navigation dots - Removed
