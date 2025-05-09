@@ -275,28 +275,55 @@ section {
 
 .scroll-indicator {
     position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 20px;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    z-index: 10;
+    gap: 5px;
+    z-index: 5;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.scroll-indicator:hover {
+    opacity: 1;
 }
 
 .arrow-container {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     animation: bounce 2s infinite;
     color: var(--accent-color);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    border: 1px solid rgba(230, 194, 41, 0.3);
+    animation: pulse 2s infinite, bounce 2s infinite;
+}
+
+.arrow-container.subtle {
+    background-color: rgba(255, 255, 255, 0.03);
+    width: 30px;
+    height: 30px;
+    font-size: 1.1rem;
 }
 
 .scroll-indicator p {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 300;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     text-shadow: var(--text-shadow);
+}
+
+.subtle-text {
+    font-size: 0.8rem !important;
+    opacity: 0.8;
 }
 
 @keyframes bounce {
@@ -311,43 +338,13 @@ section {
     }
 }
 
-/* Scroll Down Indicator at the top */
-.scroll-down-indicator {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--gradient-blue-1), var(--gradient-blue-2));
-    border-radius: 50%;
-    box-shadow: var(--box-shadow);
-    border: 2px solid rgba(230, 194, 41, 0.5);
-    cursor: pointer;
-    animation: pulse 2s infinite;
-}
-
-.scroll-down-indicator i {
-    color: var(--accent-color);
-    font-size: 1.5rem;
-    animation: bounce 2s infinite;
-}
-
-.scroll-down-indicator:hover {
-    transform: translateX(-50%) scale(1.1);
-    box-shadow: 0 5px 15px rgba(230, 194, 41, 0.3);
-}
-
+/* Estilos para la animación de pulso */
 @keyframes pulse {
     0% {
-        box-shadow: 0 0 0 0 rgba(230, 194, 41, 0.4);
+        box-shadow: 0 0 0 0 rgba(230, 194, 41, 0.2);
     }
     70% {
-        box-shadow: 0 0 0 10px rgba(230, 194, 41, 0);
+        box-shadow: 0 0 0 5px rgba(230, 194, 41, 0);
     }
     100% {
         box-shadow: 0 0 0 0 rgba(230, 194, 41, 0);

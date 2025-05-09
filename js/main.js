@@ -145,16 +145,30 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 */
 
-// Add animation delay to scroll indicator
+// Configuración del indicador de desplazamiento
 const scrollIndicator = document.querySelector('.scroll-indicator');
 if (scrollIndicator) {
-    // Ocultar el indicador de desplazamiento para evitar que invite al usuario a desplazarse
-    scrollIndicator.style.display = 'none';
-    /*
+    // Mostrar el indicador de desplazamiento con una pequeña animación
     setTimeout(() => {
-        scrollIndicator.style.opacity = '1';
-    }, 1000);
-    */
+        scrollIndicator.style.opacity = '0.7';
+    }, 1500);
+    
+    // Ocultar el indicador de desplazamiento cuando el usuario se desplaza
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > window.innerHeight * 0.1) {
+            scrollIndicator.style.opacity = '0';
+        } else {
+            scrollIndicator.style.opacity = '0.7';
+        }
+    });
+    
+    // Hacer que el indicador de desplazamiento lleve al usuario a la sección 'about'
+    scrollIndicator.addEventListener('click', function() {
+        window.scrollTo({
+            top: about.offsetTop,
+            behavior: 'smooth'
+        });
+    });
 }
 
 // Mobile touch events for better scrolling experience
