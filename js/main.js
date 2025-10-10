@@ -12,10 +12,10 @@ const sections = [hero, about, schedule, footer];
 document.addEventListener('DOMContentLoaded', function() {
     // Load hero background image
     const heroSection = document.querySelector('.hero-section');
+    // Mantener el fondo por CSS (bandas estilo marco). No sobreescribir con imagen/gradiente.
     const heroImage = new Image();
     heroImage.src = 'images/teatro-hero.jpg';
     heroImage.onload = function() {
-        heroSection.style.backgroundImage = `linear-gradient(rgba(124, 6, 6, 0.85), rgba(74, 4, 4, 0.85)), url('${heroImage.src}')`;
         heroSection.classList.add('loaded');
     };
 
