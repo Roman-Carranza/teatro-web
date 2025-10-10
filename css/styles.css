@@ -298,26 +298,41 @@ section {
 }
 
 .arrow-container {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background-color: #7c0606;
+    background-color: #ffffff; /* alto contraste en banda beige */
     display: flex;
     align-items: center;
     justify-content: center;
     animation: bounce 2s infinite;
-    color: #7c0606ff; /* icono claro para mejor contraste */
-    font-size: 1.3rem;
-    border: 1px solid #4a0404;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    color: #7c0606; /* ícono borgoña */
+    font-size: 1.35rem;
+    border: 2px solid #7c0606;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     animation: pulse 2s infinite, bounce 2s infinite;
 }
 
 .arrow-container.subtle {
     background-color: #ffffff;
-    width: 30px;
-    height: 30px;
-    font-size: 1.1rem;
+    color: #7c0606;
+    border: 2px solid #7c0606;
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+}
+
+/* Estados de interacción para mayor visibilidad */
+.arrow-container:hover,
+.arrow-container:focus-visible {
+    background-color: #7c0606;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+}
+
+.arrow-container:focus-visible {
+    outline: none;
 }
 
 .scroll-indicator p {
