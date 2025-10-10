@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const heroImage = new Image();
     heroImage.src = 'images/teatro-hero.jpg';
     heroImage.onload = function() {
-        heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('${heroImage.src}')`;
+        heroSection.style.backgroundImage = `linear-gradient(rgba(124, 6, 6, 0.85), rgba(74, 4, 4, 0.85)), url('${heroImage.src}')`;
         heroSection.classList.add('loaded');
     };
 
