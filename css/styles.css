@@ -353,7 +353,16 @@ section {
 
 /* About Section */
 .about-section {
-    background: linear-gradient(135deg, var(--gradient-blue-1), var(--gradient-blue-2));
+    /* Fondo claro con franja central para remarcar la paleta */
+    background:
+        linear-gradient(to bottom, 
+            #c8a99b 0%,
+            #c8a99b 70%,
+            #b6a99d 70%,
+            #b6a99d 80%,
+            #c8a99b 80%,
+            #c8a99b 100%
+        );
     position: relative;
     overflow: hidden;
 }
@@ -376,11 +385,11 @@ section {
 }
 
 .about-section h2 {
-    color: var(--secondary-color);
+    color: #7c0606;
     font-size: 3rem;
     margin-bottom: 2.5rem;
     text-align: center;
-    text-shadow: var(--text-shadow);
+    text-shadow: none;
     position: relative;
     display: inline-block;
     left: 50%;
@@ -414,15 +423,15 @@ section {
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
     line-height: 1.8;
-    color: var(--secondary-color);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: #4a0404;
+    text-shadow: none;
 }
 
 .quote {
     margin: 2.5rem 0;
     padding: 2rem;
     border-left: 4px solid var(--accent-color);
-    background: #4a040480;
+    background: rgba(124, 6, 6, 0.15);
     border-radius: 0 10px 10px 0;
     box-shadow: var(--box-shadow);
     position: relative;
@@ -443,9 +452,9 @@ section {
     font-style: italic;
     font-size: 1.3rem;
     margin-bottom: 1rem;
-    color: var(--secondary-color);
+    color: #4a0404;
     line-height: 1.6;
-    text-shadow: var(--text-shadow);
+    text-shadow: none;
 }
 
 .quote cite {
@@ -455,10 +464,10 @@ section {
 }
 
 .cast h3 {
-    color: var(--accent-color);
+    color: #7c0606;
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
-    text-shadow: var(--text-shadow);
+    text-shadow: none;
     position: relative;
     display: inline-block;
 }
@@ -481,20 +490,21 @@ section {
 
 .cast li {
     padding: 0.8rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--secondary-color);
+    border-bottom: 1px solid rgba(124, 6, 6, 0.25);
+    color: #4a0404;
     font-size: 1.1rem;
     transition: all 0.3s ease;
 }
 
 .cast li:hover {
     transform: translateX(5px);
-    color: var(--accent-color);
+    color: #7c0606;
 }
 
 /* Schedule Section */
 .schedule-section {
-    background: linear-gradient(135deg, var(--gradient-blue-2), var(--gradient-blue-3));
+    /* Fondo gris cálido para la segunda franja de la paleta */
+    background: #b6a99d;
     color: var(--secondary-color);
     position: relative;
     overflow: hidden;
@@ -507,8 +517,15 @@ section {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><path d="M20,20 L40,20 L40,40 L20,40 Z" fill="none" stroke="%23ffffff10" stroke-width="1"/></svg>');
-    opacity: 0.2;
+    /* Patrón sutil de líneas en diagonal tipo chevron en borgoña */
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(124, 6, 6, 0.15) 0px,
+        rgba(124, 6, 6, 0.15) 8px,
+        transparent 8px,
+        transparent 20px
+    );
+    opacity: 0.25;
     z-index: 1;
 }
 
@@ -521,7 +538,8 @@ section {
     font-size: 3rem;
     margin-bottom: 2.5rem;
     text-align: center;
-    text-shadow: var(--text-shadow);
+    color: #7c0606;
+    text-shadow: none;
     position: relative;
     display: inline-block;
     left: 50%;
@@ -544,7 +562,7 @@ section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.35);
     padding: 3rem;
     border-radius: 15px;
     backdrop-filter: blur(5px);
@@ -557,8 +575,8 @@ section {
     display: flex;
     align-items: center;
     gap: 15px;
-    color: var(--accent-color);
-    text-shadow: var(--text-shadow);
+    color: #7c0606;
+    text-shadow: none;
 }
 
 .schedule-table h3 i, .location h3 i {
@@ -569,7 +587,7 @@ section {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    box-shadow: 0 0 10px #c8a99b4d;
+    box-shadow: 0 0 10px #7c060622;
 }
 
 .schedule-table table {
@@ -588,8 +606,8 @@ section {
 
 .schedule-table th {
     font-weight: 600;
-    background-color: #4a040480;
-    color: var(--accent-color);
+    background-color: #7c0606;
+    color: #f5f5f5;
     letter-spacing: 1px;
     text-transform: uppercase;
     font-size: 0.9rem;
@@ -597,7 +615,7 @@ section {
 
 .schedule-table tr {
     transition: all 0.3s ease;
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 .schedule-table tr:hover {
@@ -609,7 +627,8 @@ section {
     margin-bottom: 0.8rem;
     font-size: 1.1rem;
     line-height: 1.6;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: #4a0404;
+    text-shadow: none;
 }
 
 .map-container {
@@ -628,7 +647,7 @@ section {
 
 .contact-info {
     margin-top: 2rem;
-    background: #4a040480;
+    background: rgba(124, 6, 6, 0.15);
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: var(--box-shadow);
