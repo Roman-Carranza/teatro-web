@@ -133,10 +133,13 @@
         const base = name.split(/[-_\s]?\d+/)[0];
         return titleCase(base);
       };
+      // Soporta 'personajes' y 'personajes teatro'
+      let BASE_DIR = 'personajes';
+      const isUnderAnyBase = (p) => /^(personajes|personajes teatro)\//i.test(p||'');
       const prefixIfNeeded = (p, pref) => {
         if(!p) return p; if(/^https?:\/\//i.test(p)) return p; if(p.startsWith('/')) return p;
-        if(/^personajes\//i.test(p)) return p;
-        return pref + p;
+        if(isUnderAnyBase(p)) return p;
+        return (pref || (BASE_DIR + '/')) + p;
       };
 
       // ==== Estado ====
@@ -238,20 +241,27 @@
       // ==== Datos ====
       // Para GitHub Pages (/teatro-web) usar rutas RELATIVAS sin slash inicial
       async function loadFromManifest(){
-        const urls=['personajes/elenco.manifest.json','elenco.json'];
+        const urls=[
+          'personajes/elenco.manifest.json',
+          'personajes teatro/elenco.manifest.json',
+          'elenco.json'
+        ];
         for(const url of urls){
           try{
             const r=await fetch(url,{cache:'no-store'});
             if(r.ok){
               const data=await r.json();
               if(Array.isArray(data.personajes)&&Array.isArray(data.backstages)){
+                // Detectar base según el manifest usado
+                if(url.startsWith('personajes teatro/')) BASE_DIR = 'personajes teatro';
+                else if(url.startsWith('personajes/')) BASE_DIR = 'personajes';
                 PERSONAJES = data.personajes.map(p=>({
                   nombre: p.nombre || baseFromFilename(p.fotos?.[0]||''),
-                  fotos: (p.fotos||[]).map(ph=>prefixIfNeeded(ph,'personajes/'))
+                  fotos: (p.fotos||[]).map(ph=>prefixIfNeeded(ph, BASE_DIR + '/'))
                 }));
                 BACKSTAGES = data.backstages.map(b=>({
                   titulo: b.titulo || baseFromFilename(b.foto||''),
-                  foto:   prefixIfNeeded(b.foto||'','personajes/Backstage/')
+                  foto:   prefixIfNeeded(b.foto||'', BASE_DIR + '/Backstage/')
                 }));
                 return true;
               }

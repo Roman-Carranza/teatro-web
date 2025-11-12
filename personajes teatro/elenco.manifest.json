@@ -1,0 +1,82 @@
+{
+  "personajes": [
+    {
+      "nombre": "Abuela",
+      "fotos": [
+        "Abuela1.jpeg",
+        "Abuela2.jpeg",
+        "Abuela3.jpeg"
+      ]
+    },
+    {
+      "nombre": "Aurora",
+      "fotos": [
+        "Aurora1.jpeg",
+        "aurora2.jpeg",
+        "aurora3.jpeg"
+      ]
+    },
+    {
+      "nombre": "Director",
+      "fotos": [
+        "Director1.jpeg",
+        "Director2.jpeg",
+        "Director3.jpeg"
+      ]
+    },
+    {
+      "nombre": "Elvira",
+      "fotos": [
+        "elvira1.jpeg",
+        "elvira2.jpeg"
+      ]
+    },
+    {
+      "nombre": "Estela",
+      "fotos": [
+        "estela1.jpeg"
+      ]
+    },
+    {
+      "nombre": "Laura",
+      "fotos": [
+        "Laura1.jpeg",
+        "Laura2.jpeg"
+      ]
+    }
+  ],
+  "backstages": [
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage/Backstage 1.JPG"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage/Backstage 15.JPG"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage/Backstage 24.JPG"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage/Backstage 28.JPG"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage/Backstage 29.JPG"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage/Backstage 32.JPG"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage/Backstage 41.JPG"
+    },
+    {
+      "titulo": "Screenshot From",
+      "foto": "Backstage/Screenshot from 2025-11-12 14-46-01.png"
+    }
+  ]
+}
