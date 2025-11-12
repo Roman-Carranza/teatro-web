@@ -106,6 +106,8 @@
       #elenco .wrap { max-width:1100px; margin:16px auto; padding:0 18px; }
       #elenco .rail { display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding:10px 4px 8px;
                       touch-action:pan-x; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; }
+      /* centrado mejor en móvil */
+      #elenco .rail { padding-left: max(12px, (100% - 360px)/2); padding-right: max(12px, (100% - 360px)/2); }
       #elenco .rail { scrollbar-width:none; -ms-overflow-style:none; }
       #elenco .rail::-webkit-scrollbar { display:none; }
       #elenco .rail.dragging { cursor:grabbing; user-select:none; scroll-behavior:auto; }
@@ -154,18 +156,34 @@
       const tabB = document.querySelector('#tab-backstage');
 
       const imgTag = (src, alt) => src
-        ? `<img src="${src}" alt="${alt||''}" loading="lazy" />` 
-        : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#0f1016,#0b0c11);display:grid;place-items:center;color:#56576b;font-size:12px">Sin imagen</div>` ;
+        ? `<img src="${encodeURI(src)}" alt="${alt||''}" loading="lazy" />`
+        : '';
 
       function CardPersonaje(p){
         const el = document.createElement('article'); el.className = 'card';
-        const [f1,f2,f3] = [p.fotos?.[0], p.fotos?.[1], p.fotos?.[2]];
+        const fotos = (p.fotos||[]).filter(Boolean);
+        let media = '';
+        if (fotos.length >= 3) {
+          const [f1,f2,f3] = fotos;
+          media = `
+            <div class="collage">
+              <figure class="frame big">${imgTag(f1, `Foto principal de ${p.nombre}`)}</figure>
+              <figure class="frame">${imgTag(f2, `Foto 2 de ${p.nombre}`)}</figure>
+              <figure class="frame">${imgTag(f3, `Foto 3 de ${p.nombre}`)}</figure>
+            </div>`;
+        } else if (fotos.length === 2) {
+          const [f1,f2] = fotos;
+          media = `
+            <div class="collage">
+              <figure class="frame big">${imgTag(f1, `Foto principal de ${p.nombre}`)}</figure>
+              <figure class="frame">${imgTag(f2, `Foto 2 de ${p.nombre}`)}</figure>
+            </div>`;
+        } else if (fotos.length === 1) {
+          const [f1] = fotos;
+          media = `<figure class="frame single">${imgTag(f1, `Foto de ${p.nombre}`)}</figure>`;
+        }
         el.innerHTML = `
-          <div class="collage">
-            <figure class="frame big">${imgTag(f1, `Foto principal de ${p.nombre}`)}</figure>
-            <figure class="frame">${imgTag(f2, `Foto 2 de ${p.nombre}`)}</figure>
-            <figure class="frame">${imgTag(f3, `Foto 3 de ${p.nombre}`)}</figure>
-          </div>
+          ${media}
           <div class="title">${p.nombre||''}</div>
           <div class="subtitle">Personaje</div>`;
         return el;
@@ -218,10 +236,10 @@
       tabB.addEventListener('click', ()=>{ vIndex=NP; goToVirtual(vIndex); updateTabs(); stopAuto(); startAuto(); });
 
       // Swipe/drag
-      let isDrag=false, startX=0, startLeft=0; const SWIPE_MIN=60;
-      rail.addEventListener('pointerdown', e=>{ isDrag=true; startX=e.clientX; startLeft=rail.scrollLeft; rail.classList.add('dragging'); rail.style.scrollSnapType='none'; try{ rail.setPointerCapture(e.pointerId);}catch{} stopAuto(); });
+      let isDrag=false, startX=0, startLeft=0, startT=0; const SWIPE_MIN=60; const SWIPE_V=0.5; // px/ms
+      rail.addEventListener('pointerdown', e=>{ isDrag=true; startX=e.clientX; startLeft=rail.scrollLeft; startT=performance.now(); rail.classList.add('dragging'); rail.style.scrollSnapType='none'; try{ rail.setPointerCapture(e.pointerId);}catch{} stopAuto(); });
       rail.addEventListener('pointermove', e=>{ if(!isDrag) return; rail.scrollLeft = startLeft - (e.clientX - startX); });
-      function endDrag(e){ if(!isDrag) return; isDrag=false; rail.classList.remove('dragging'); rail.style.scrollSnapType='x mandatory'; try{ rail.releasePointerCapture(e.pointerId);}catch{} const dx=e.clientX-startX; if(Math.abs(dx)>SWIPE_MIN){ dx<0? next(): prev(); } else { onScrollStop(); } startAuto(); }
+      function endDrag(e){ if(!isDrag) return; isDrag=false; const dt=performance.now()-startT; const dx=e.clientX-startX; rail.classList.remove('dragging'); rail.style.scrollSnapType='x mandatory'; try{ rail.releasePointerCapture(e.pointerId);}catch{} if(Math.abs(dx)>SWIPE_MIN || Math.abs(dx/dt)>SWIPE_V){ dx<0? next(): prev(); } else { onScrollStop(); } startAuto(); }
       rail.addEventListener('pointerup', endDrag); rail.addEventListener('pointercancel', endDrag); rail.addEventListener('pointerleave', endDrag);
 
       // Debounce scroll para ajustar clones sin salto
@@ -235,7 +253,7 @@
         else { vIndex=closest-1; }
         updateTabs();
       }
-      rail.addEventListener('scroll', ()=>{ if(scrollTimer) clearTimeout(scrollTimer); scrollTimer=setTimeout(onScrollStop,120); });
+      rail.addEventListener('scroll', ()=>{ if(scrollTimer) clearTimeout(scrollTimer); scrollTimer=setTimeout(onScrollStop,80); });
       window.addEventListener('resize', ()=> goToVirtual(vIndex,false));
 
       // ==== Datos ====
