@@ -1,0 +1,28 @@
+name: Build elenco manifest
+on:
+  push:
+    paths:
+      - 'personajes/**'
+      - 'scripts/build-elenco-manifest.mjs'
+      - '.github/workflows/build-elenco.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: { contents: write }
+    defaults:
+      run:
+        working-directory: teatro-web
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Generate manifest
+        run: node scripts/build-elenco-manifest.mjs
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore(elenco): actualizar manifest'
+          file_pattern: 'personajes/elenco.manifest.json'
