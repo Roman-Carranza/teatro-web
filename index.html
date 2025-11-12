@@ -153,6 +153,9 @@
         list.push(basePref + v);
         const baseName = v.split('/').pop();
         if(baseName && basePref + baseName !== list[1]) list.push(basePref + baseName);
+        // fallbacks a carpeta Backstage en la raíz del sitio
+        list.push('Backstage/' + v);
+        if(baseName) list.push('Backstage/' + baseName);
         // eliminar duplicados preservando orden
         return Array.from(new Set(list));
       };
@@ -168,8 +171,9 @@
       const tabP = document.querySelector('#tab-personajes');
       const tabB = document.querySelector('#tab-backstage');
 
+      const encodePath = (p) => (p||'').split('/').map(s=>encodeURIComponent(s)).join('/');
       const imgTag = (src, alt, onerr) => src
-        ? `<img src="${encodeURI(src)}" alt="${alt||''}" loading="lazy" ${onerr?`onerror=\"${onerr}\"`:''} />`
+        ? `<img src="${encodePath(src)}" alt="${alt||''}" loading="lazy" ${onerr?`onerror=\"${onerr}\"`:''} />`
         : '';
 
       function CardPersonaje(p){

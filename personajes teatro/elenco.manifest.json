@@ -45,38 +45,5 @@
       ]
     }
   ],
-  "backstages": [
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage 1.JPG"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage 15.JPG"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage 24.JPG"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage 28.JPG"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage 29.JPG"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage 32.JPG"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage 41.JPG"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage.png"
-    }
-  ]
+  "backstages": []
 }
