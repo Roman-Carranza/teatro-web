@@ -120,8 +120,9 @@
       #elenco .collage { display:grid; grid-template-columns:2fr 1fr; grid-template-rows:1fr 1fr; gap:10px; height:clamp(170px,40vw,220px); }
       #elenco .collage .big { grid-row:1/3; grid-column:1/2; }
       #elenco .frame { position:relative; border-radius:14px; overflow:hidden; background:#0f0f14; border:1px solid var(--stroke); }
-      #elenco .frame img { width:100%; height:100%; object-fit:cover; display:block; }
+      #elenco .frame img { width:100%; height:100%; object-fit:cover; object-position:center center; display:block; }
       #elenco .single { height:clamp(170px,40vw,220px); }
+      #elenco .card { scroll-snap-stop: always; }
     </style>
 
     <script type="module">
@@ -143,6 +144,8 @@
         if(isUnderAnyBase(p)) return p;
         return (pref || (BASE_DIR + '/')) + p;
       };
+      const backstagePrimary = (p)=> prefixIfNeeded(p, BASE_DIR + '/Backstage/');
+      const backstageFallback = (p)=> prefixIfNeeded(p, 'Backstage/');
 
       // ==== Estado ====
       let PERSONAJES = [];   // { nombre, fotos:[...] }
@@ -155,8 +158,8 @@
       const tabP = document.querySelector('#tab-personajes');
       const tabB = document.querySelector('#tab-backstage');
 
-      const imgTag = (src, alt) => src
-        ? `<img src="${encodeURI(src)}" alt="${alt||''}" loading="lazy" />`
+      const imgTag = (src, alt, onerr) => src
+        ? `<img src="${encodeURI(src)}" alt="${alt||''}" loading="lazy" ${onerr?`onerror=\"${onerr}\"`:''} />`
         : '';
 
       function CardPersonaje(p){
@@ -190,8 +193,12 @@
       }
       function CardBackstage(b){
         const el = document.createElement('article'); el.className = 'card';
+        const p = b.foto||'';
+        const src1 = backstagePrimary(p);
+        const src2 = backstageFallback(p);
+        const onerr = src1!==src2 ? `this.onerror=null; this.src='${encodeURI(src2)}'` : '';
         el.innerHTML = `
-          <figure class="frame single">${imgTag(b.foto, b.titulo)}</figure>
+          <figure class="frame single">${imgTag(src1, b.titulo, onerr)}</figure>
           <div class="title">${b.titulo||''}</div>
           <div class="subtitle">Backstage</div>`;
         return el;
@@ -235,9 +242,9 @@
       tabP.addEventListener('click', ()=>{ vIndex=0;  goToVirtual(vIndex); updateTabs(); stopAuto(); startAuto(); });
       tabB.addEventListener('click', ()=>{ vIndex=NP; goToVirtual(vIndex); updateTabs(); stopAuto(); startAuto(); });
 
-      // Swipe/drag
+      // Swipe/drag: usa drag sólo con mouse; en touch deja scroll nativo
       let isDrag=false, startX=0, startLeft=0, startT=0; const SWIPE_MIN=60; const SWIPE_V=0.5; // px/ms
-      rail.addEventListener('pointerdown', e=>{ isDrag=true; startX=e.clientX; startLeft=rail.scrollLeft; startT=performance.now(); rail.classList.add('dragging'); rail.style.scrollSnapType='none'; try{ rail.setPointerCapture(e.pointerId);}catch{} stopAuto(); });
+      rail.addEventListener('pointerdown', e=>{ if(e.pointerType==='mouse'){ isDrag=true; startX=e.clientX; startLeft=rail.scrollLeft; startT=performance.now(); rail.classList.add('dragging'); rail.style.scrollSnapType='none'; try{ rail.setPointerCapture(e.pointerId);}catch{} } stopAuto(); });
       rail.addEventListener('pointermove', e=>{ if(!isDrag) return; rail.scrollLeft = startLeft - (e.clientX - startX); });
       function endDrag(e){ if(!isDrag) return; isDrag=false; const dt=performance.now()-startT; const dx=e.clientX-startX; rail.classList.remove('dragging'); rail.style.scrollSnapType='x mandatory'; try{ rail.releasePointerCapture(e.pointerId);}catch{} if(Math.abs(dx)>SWIPE_MIN || Math.abs(dx/dt)>SWIPE_V){ dx<0? next(): prev(); } else { onScrollStop(); } startAuto(); }
       rail.addEventListener('pointerup', endDrag); rail.addEventListener('pointercancel', endDrag); rail.addEventListener('pointerleave', endDrag);
@@ -254,6 +261,9 @@
         updateTabs();
       }
       rail.addEventListener('scroll', ()=>{ if(scrollTimer) clearTimeout(scrollTimer); scrollTimer=setTimeout(onScrollStop,80); });
+      // pausar/reanudar auto en touch
+      rail.addEventListener('touchstart', stopAuto, { passive:true });
+      rail.addEventListener('touchend', ()=>{ startAuto(); }, { passive:true });
       window.addEventListener('resize', ()=> goToVirtual(vIndex,false));
 
       // ==== Datos ====
