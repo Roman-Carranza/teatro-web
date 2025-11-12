@@ -17,14 +17,6 @@
       ]
     },
     {
-      "nombre": "Backstage",
-      "fotos": [
-        "Backstage1.jpeg",
-        "Backstage2.jpeg",
-        "Backstage3.jpeg"
-      ]
-    },
-    {
       "nombre": "Director",
       "fotos": [
         "Director1.jpeg",
@@ -53,5 +45,38 @@
       ]
     }
   ],
-  "backstages": []
+  "backstages": [
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage1.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage2.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage3.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage4.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage5.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage6.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage7.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage8.jpeg"
+    }
+  ]
 }
