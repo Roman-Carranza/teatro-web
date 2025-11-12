@@ -114,6 +114,8 @@
 
       #elenco .card { background:linear-gradient(180deg,var(--panel) 0%,var(--panel-2) 100%); border-radius:var(--radius); box-shadow:var(--shadow);
                       padding:14px; min-width:clamp(260px,78vw,360px); max-width:360px; scroll-snap-align:center; border:1px solid var(--stroke); color:var(--text); }
+      /* leve realce por acento, sin invadir el resto del sitio */
+      #elenco .card { outline:1px solid color-mix(in oklab, var(--accent) 12%, transparent); }
       #elenco .title { margin:10px 2px 0; font-weight:700; font-size:15px; }
       #elenco .subtitle { margin:2px 2px 0; color:var(--muted); font-size:12px; }
 
@@ -193,8 +195,26 @@
         ];
       };
 
-      function CardPersonaje(p){
-        const el = document.createElement('article'); el.className = 'card';
+      // Paleta sutil alineada a la página (rosas/burdeos/violáceos/azules profundos)
+      const PALETTE = [
+        { p:'#121216', p2:'#17171d', a:'#ff8aa6' },   // base
+        { p:'#141218', p2:'#1a1720', a:'#d88bd6' },   // lila
+        { p:'#12141a', p2:'#171c24', a:'#8fb4ff' },   // azul
+        { p:'#141616', p2:'#191e1e', a:'#7ed4c9' },   // teal
+        { p:'#171214', p2:'#1e171a', a:'#ffb28f' },   // durazno
+        { p:'#15121a', p2:'#1b1622', a:'#b28fff' }    // violeta
+      ];
+      const applyPalette = (el, i)=>{
+        const c = PALETTE[i % PALETTE.length];
+        if(!c) return;
+        el.style.setProperty('--panel', c.p);
+        el.style.setProperty('--panel-2', c.p2);
+        el.style.setProperty('--accent', c.a);
+      };
+
+      function CardPersonaje(p, idx){
+        const el = document.createElement('article'); el.className = 'card type-personaje';
+        applyPalette(el, idx);
         const fotos = (p.fotos||[]).filter(Boolean);
         let media = '';
         if (fotos.length >= 3) {
@@ -233,8 +253,9 @@
         });
         return el;
       }
-      function CardBackstage(b){
-        const el = document.createElement('article'); el.className = 'card';
+      function CardBackstage(b, idx){
+        const el = document.createElement('article'); el.className = 'card type-backstage';
+        applyPalette(el, idx);
         const srcs = backstageCandidates(b.foto||'');
         const first = srcs[0] || '';
         el.innerHTML = `
@@ -255,7 +276,7 @@
         }
         return el;
       }
-      const buildCard = (it) => it.type==='personaje' ? CardPersonaje(it.data) : CardBackstage(it.data);
+      const buildCard = (it, idx) => it.type==='personaje' ? CardPersonaje(it.data, idx) : CardBackstage(it.data, idx);
 
       function rebuildCombined(){
         COMBINED = [
@@ -283,9 +304,9 @@
 
       function render(){
         rail.innerHTML = ''; if(N===0) return;
-        rail.appendChild(buildCard(COMBINED[N-1]));           // clon izq
-        COMBINED.forEach(it => rail.appendChild(buildCard(it))); // reales
-        rail.appendChild(buildCard(COMBINED[0]));             // clon der
+        rail.appendChild(buildCard(COMBINED[N-1], N-1));           // clon izq
+        COMBINED.forEach((it,i) => rail.appendChild(buildCard(it,i))); // reales
+        rail.appendChild(buildCard(COMBINED[0], 0));               // clon der
         requestAnimationFrame(()=> goToVirtual(vIndex, false));
         updateTabs();
       }
