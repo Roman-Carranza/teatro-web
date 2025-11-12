@@ -1,0 +1,93 @@
+{
+  "personajes": [],
+  "backstages": [
+    {
+      "titulo": "Abuela",
+      "foto": "Abuela1.jpeg"
+    },
+    {
+      "titulo": "Abuela",
+      "foto": "Abuela2.jpeg"
+    },
+    {
+      "titulo": "Abuela",
+      "foto": "Abuela3.jpeg"
+    },
+    {
+      "titulo": "Aurora",
+      "foto": "Aurora1.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage1.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage2.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage3.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage4.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage5.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage6.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage7.jpeg"
+    },
+    {
+      "titulo": "Backstage",
+      "foto": "Backstage8.jpeg"
+    },
+    {
+      "titulo": "Director",
+      "foto": "Director1.jpeg"
+    },
+    {
+      "titulo": "Director",
+      "foto": "Director2.jpeg"
+    },
+    {
+      "titulo": "Director",
+      "foto": "Director3.jpeg"
+    },
+    {
+      "titulo": "Laura",
+      "foto": "Laura1.jpeg"
+    },
+    {
+      "titulo": "Laura",
+      "foto": "Laura2.jpeg"
+    },
+    {
+      "titulo": "Aurora",
+      "foto": "aurora2.jpeg"
+    },
+    {
+      "titulo": "Aurora",
+      "foto": "aurora3.jpeg"
+    },
+    {
+      "titulo": "Elvira",
+      "foto": "elvira1.jpeg"
+    },
+    {
+      "titulo": "Elvira",
+      "foto": "elvira2.jpeg"
+    },
+    {
+      "titulo": "Estela",
+      "foto": "estela1.jpeg"
+    }
+  ]
+}

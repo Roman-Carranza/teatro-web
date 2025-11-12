@@ -24,6 +24,7 @@ async function main(){
 
   const DIR_P = path.join(ROOT, BASE);
   const DIR_B = path.join(DIR_P, 'Backstage'); // Backstage dentro de la base
+  const DIR_B2 = path.join(DIR_P, 'backstage teatro'); // alternativa con espacio/minúsculas
   const DIR_B_ALT = path.join(ROOT, 'Backstage'); // Backstage en raíz del proyecto
   const OUT   = path.join(DIR_P, 'elenco.manifest.json');
 
@@ -31,8 +32,9 @@ async function main(){
   const entries = await fs.readdir(DIR_P, { withFileTypes: true });
   const files = entries.filter(e => e.isFile() && IMG_RE.test(e.name)).map(e => e.name);
   const backs1 = await list(DIR_B);
-  const backs2 = await list(DIR_B_ALT);
-  const backs = Array.from(new Set([...(backs1||[]), ...(backs2||[])])).sort();
+  const backs2 = await list(DIR_B2);
+  const backs3 = await list(DIR_B_ALT);
+  const backs = Array.from(new Set([...(backs1||[]), ...(backs2||[]), ...(backs3||[])])).sort();
 
   // agrupar por base (Abuela, Aurora, Director, etc.)
   const map = new Map();

@@ -144,9 +144,23 @@
         if(isUnderAnyBase(p)) return p;
         return (pref || (BASE_DIR + '/')) + p;
       };
-      const normalizeBackstagePath = (p)=>{
+      const backstageCandidates = (p)=>{
         const v = (p||'').replace(/^\/+/, '');
-        return /^backstage\//i.test(v) ? v : ('Backstage/' + v);
+        const list = [];
+        const baseName = v.split('/').pop();
+        // si ya viene con subcarpeta
+        if(/^backstage(\s+teatro)?\//i.test(v)) list.push(v);
+        const dirs = [
+          BASE_DIR + '/backstage teatro/',
+          BASE_DIR + '/Backstage/',
+          'backstage teatro/',
+          'Backstage/'
+        ];
+        for(const d of dirs){
+          list.push(d + v);
+          if(baseName) list.push(d + baseName);
+        }
+        return Array.from(new Set(list));
       };
 
       // ==== Estado ====
@@ -196,11 +210,24 @@
       }
       function CardBackstage(b){
         const el = document.createElement('article'); el.className = 'card';
-        const first = normalizeBackstagePath(b.foto||'');
+        const srcs = backstageCandidates(b.foto||'');
+        const first = srcs[0] || '';
         el.innerHTML = `
           <figure class="frame single">${imgTag(first, b.titulo)}</figure>
           <div class="title">${b.titulo||''}</div>
           <div class="subtitle">Backstage</div>`;
+        const img = el.querySelector('img');
+        if (img && srcs.length > 1) {
+          img.dataset.fallbacks = JSON.stringify(srcs.slice(1));
+          img.onerror = function(){
+            try{
+              const rest = JSON.parse(this.dataset.fallbacks||'[]');
+              const next = rest.shift();
+              if(next){ this.dataset.fallbacks = JSON.stringify(rest); this.src = encodePath(next); return; }
+            }catch{}
+            this.onerror = null;
+          };
+        }
         return el;
       }
       const buildCard = (it) => it.type==='personaje' ? CardPersonaje(it.data) : CardBackstage(it.data);
@@ -240,7 +267,7 @@
       const stopAuto =()=>{ if(timer){ clearInterval(timer); timer=null; } };
 
       tabP.addEventListener('click', ()=>{ vIndex=0;  goToVirtual(vIndex); updateTabs(); stopAuto(); startAuto(); });
-      tabB.addEventListener('click', ()=>{ vIndex=NP; goToVirtual(vIndex); updateTabs(); stopAuto(); startAuto(); });
+      tabB.addEventListener('click', ()=>{ vIndex = (NP < N ? NP : 0); goToVirtual(vIndex); updateTabs(); stopAuto(); startAuto(); });
 
       // Swipe/drag: usa drag sólo con mouse; en touch deja scroll nativo
       let isDrag=false, startX=0, startLeft=0, startT=0; const SWIPE_MIN=60; const SWIPE_V=0.5; // px/ms
@@ -289,7 +316,7 @@
                 }));
                 BACKSTAGES = data.backstages.map(b=>({
                   titulo: b.titulo || baseFromFilename(b.foto||''),
-                  foto:   normalizeBackstagePath(b.foto||'')
+                  foto:   (b.foto||'')
                 }));
                 return true;
               }
@@ -312,7 +339,9 @@
       (async function init(){
         let ok = await loadFromManifest();
         if(!ok) loadFallback();
-        rebuildCombined(); render(); startAuto();
+        rebuildCombined();
+        try { console.log('[Elenco] counts:', { personajes: PERSONAJES.length, backstages: BACKSTAGES.length, total: N, NP }); } catch {}
+        render(); startAuto();
       })();
     </script>
   </section>
