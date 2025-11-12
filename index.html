@@ -178,6 +178,20 @@
       const imgTag = (src, alt, onerr) => src
         ? `<img src="${encodePath(src)}" alt="${alt||''}" loading="lazy" ${onerr?`onerror=\"${onerr}\"`:''} />`
         : '';
+      const imgWithFallback = (candidates, alt) => {
+        const srcs = (candidates||[]).filter(Boolean);
+        const first = srcs[0] || '';
+        const data = srcs.length > 1 ? ` data-srcs='${JSON.stringify(srcs.slice(1)).replaceAll("'","&apos;")}'` : '';
+        return first ? `<img src="${encodePath(first)}" alt="${alt||''}" loading="lazy"${data} />` : '';
+      };
+
+      const personCandidates = (v)=>{
+        const name = (v||'').replace(/^\/+/, '');
+        return [
+          BASE_DIR + '/' + name,
+          BASE_DIR + '/backstage teatro/' + name
+        ];
+      };
 
       function CardPersonaje(p){
         const el = document.createElement('article'); el.className = 'card';
@@ -187,25 +201,36 @@
           const [f1,f2,f3] = fotos;
           media = `
             <div class="collage">
-              <figure class="frame big">${imgTag(f1, `Foto principal de ${p.nombre}`)}</figure>
-              <figure class="frame">${imgTag(f2, `Foto 2 de ${p.nombre}`)}</figure>
-              <figure class="frame">${imgTag(f3, `Foto 3 de ${p.nombre}`)}</figure>
+              <figure class="frame big">${imgWithFallback(personCandidates(f1), `Foto principal de ${p.nombre}`)}</figure>
+              <figure class="frame">${imgWithFallback(personCandidates(f2), `Foto 2 de ${p.nombre}`)}</figure>
+              <figure class="frame">${imgWithFallback(personCandidates(f3), `Foto 3 de ${p.nombre}`)}</figure>
             </div>`;
         } else if (fotos.length === 2) {
           const [f1,f2] = fotos;
           media = `
             <div class="collage">
-              <figure class="frame big">${imgTag(f1, `Foto principal de ${p.nombre}`)}</figure>
-              <figure class="frame">${imgTag(f2, `Foto 2 de ${p.nombre}`)}</figure>
+              <figure class="frame big">${imgWithFallback(personCandidates(f1), `Foto principal de ${p.nombre}`)}</figure>
+              <figure class="frame">${imgWithFallback(personCandidates(f2), `Foto 2 de ${p.nombre}`)}</figure>
             </div>`;
         } else if (fotos.length === 1) {
           const [f1] = fotos;
-          media = `<figure class="frame single">${imgTag(f1, `Foto de ${p.nombre}`)}</figure>`;
+          media = `<figure class="frame single">${imgWithFallback(personCandidates(f1), `Foto de ${p.nombre}`)}</figure>`;
         }
         el.innerHTML = `
           ${media}
           <div class="title">${p.nombre||''}</div>
           <div class="subtitle">Personaje</div>`;
+        // attach fallbacks now that elements exist
+        el.querySelectorAll('img[data-srcs]').forEach(img=>{
+          img.onerror = function(){
+            try{
+              const rest = JSON.parse(this.getAttribute('data-srcs')||'[]');
+              const next = rest.shift();
+              if(next){ this.setAttribute('data-srcs', JSON.stringify(rest)); this.src = encodePath(next); return; }
+            }catch{}
+            this.onerror = null;
+          };
+        });
         return el;
       }
       function CardBackstage(b){
@@ -316,7 +341,7 @@
                 else if(url.startsWith('personajes/')) BASE_DIR = 'personajes';
                 PERSONAJES = data.personajes.map(p=>({
                   nombre: p.nombre || baseFromFilename(p.fotos?.[0]||''),
-                  fotos: (p.fotos||[]).map(ph=>prefixIfNeeded(ph, BASE_DIR + '/'))
+                  fotos: (p.fotos||[])
                 }));
                 BACKSTAGES = data.backstages.map(b=>({
                   titulo: b.titulo || baseFromFilename(b.foto||''),

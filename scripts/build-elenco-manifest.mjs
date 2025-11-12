@@ -62,8 +62,16 @@ async function main(){
   const persOther = other.filter(p => !inDir(p, 'Backstage')).map(baseName);
 
   // Consolidar
-  const personFiles = Array.from(new Set([...btPers, ...persOther]));
-  const backs = Array.from(new Set([...btBacks, ...bsBacks])).sort();
+  // Clasificar por base: cualquier archivo con base 'Backstage' va a backstages
+  const toBase = f => baseFrom(f).toLowerCase();
+  const rawPersons = [...btPers, ...persOther];
+  const fromPersonsToBacks = rawPersons.filter(f => toBase(f) === 'backstage');
+  const personFiles = Array.from(new Set(rawPersons.filter(f => toBase(f) !== 'backstage')));
+  const backs = Array.from(new Set([...
+    btBacks,
+    ...bsBacks,
+    ...fromPersonsToBacks
+  ])).sort();
 
   // agrupar por base (Abuela, Aurora, Director, etc.)
   const map = new Map();
