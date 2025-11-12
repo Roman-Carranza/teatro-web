@@ -144,20 +144,9 @@
         if(isUnderAnyBase(p)) return p;
         return (pref || (BASE_DIR + '/')) + p;
       };
-      const backstageCandidates = (p)=>{
+      const normalizeBackstagePath = (p)=>{
         const v = (p||'').replace(/^\/+/, '');
-        const list = [];
-        if(/^backstage\//i.test(v)) list.push(v);
-        const basePref = BASE_DIR + '/Backstage/';
-        // si el manifest trae un subpath, probamos mantenerlo; y también sólo el nombre base
-        list.push(basePref + v);
-        const baseName = v.split('/').pop();
-        if(baseName && basePref + baseName !== list[1]) list.push(basePref + baseName);
-        // fallbacks a carpeta Backstage en la raíz del sitio
-        list.push('Backstage/' + v);
-        if(baseName) list.push('Backstage/' + baseName);
-        // eliminar duplicados preservando orden
-        return Array.from(new Set(list));
+        return /^backstage\//i.test(v) ? v : ('Backstage/' + v);
       };
 
       // ==== Estado ====
@@ -207,25 +196,11 @@
       }
       function CardBackstage(b){
         const el = document.createElement('article'); el.className = 'card';
-        const p = b.foto||'';
-        const srcs = backstageCandidates(p);
-        const first = srcs[0] || '';
+        const first = normalizeBackstagePath(b.foto||'');
         el.innerHTML = `
           <figure class="frame single">${imgTag(first, b.titulo)}</figure>
           <div class="title">${b.titulo||''}</div>
           <div class="subtitle">Backstage</div>`;
-        const img = el.querySelector('img');
-        if (img && srcs.length > 1) {
-          img.dataset.fallbacks = JSON.stringify(srcs.slice(1));
-          img.onerror = function(){
-            try{
-              const rest = JSON.parse(this.dataset.fallbacks||'[]');
-              const next = rest.shift();
-              if(next){ this.dataset.fallbacks = JSON.stringify(rest); this.src = encodeURI(next); return; }
-            }catch{}
-            this.onerror = null;
-          };
-        }
         return el;
       }
       const buildCard = (it) => it.type==='personaje' ? CardPersonaje(it.data) : CardBackstage(it.data);
@@ -314,7 +289,7 @@
                 }));
                 BACKSTAGES = data.backstages.map(b=>({
                   titulo: b.titulo || baseFromFilename(b.foto||''),
-                  foto:   prefixIfNeeded(b.foto||'', BASE_DIR + '/Backstage/')
+                  foto:   normalizeBackstagePath(b.foto||'')
                 }));
                 return true;
               }
