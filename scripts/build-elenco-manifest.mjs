@@ -28,9 +28,26 @@ async function main(){
   const DIR_B_ALT = path.join(ROOT, 'Backstage'); // Backstage en raíz del proyecto
   const OUT   = path.join(DIR_P, 'elenco.manifest.json');
 
-  // personajes: todo menos la carpeta Backstage
-  const entries = await fs.readdir(DIR_P, { withFileTypes: true });
-  const files = entries.filter(e => e.isFile() && IMG_RE.test(e.name)).map(e => e.name);
+  // Recorrer personajes de forma recursiva, excluyendo carpetas de backstage
+  async function walk(dir, rel=''){
+    let out=[];
+    let list;
+    try { list = await fs.readdir(dir, { withFileTypes:true }); } catch { return out; }
+    for(const e of list){
+      const name = e.name;
+      const lower = name.toLowerCase();
+      if(e.isDirectory()){
+        if(lower === 'backstage' || lower === 'backstage teatro') continue;
+        const subRel = path.join(rel, name);
+        out = out.concat(await walk(path.join(dir, name), subRel));
+      } else if(e.isFile() && IMG_RE.test(name)){
+        const relPath = path.join(rel, name).replace(/\\/g,'/');
+        out.push(relPath);
+      }
+    }
+    return out;
+  }
+  const files = await walk(DIR_P);
   const backs1 = await list(DIR_B);
   const backs2 = await list(DIR_B2);
   const backs3 = await list(DIR_B_ALT);
@@ -40,7 +57,7 @@ async function main(){
   const map = new Map();
   for (const f of files) { const b=baseFrom(f); if(!map.has(b)) map.set(b,[]); map.get(b).push(f); }
 
-  const personajes = [...map.entries()].map(([nombre, fotos])=>({ nombre, fotos:fotos.sort() }))
+  const personajes = [...map.entries()].map(([nombre, fotos])=>({ nombre, fotos:fotos.sort().slice(0,3) }))
     .sort((a,b)=>a.nombre.localeCompare(b.nombre));
   const backstages = backs.sort().map(f=>({ titulo: baseFrom(f), foto: f }));
 
