@@ -1,93 +1,57 @@
 {
-  "personajes": [],
-  "backstages": [
+  "personajes": [
     {
-      "titulo": "Abuela",
-      "foto": "Abuela1.jpeg"
+      "nombre": "Abuela",
+      "fotos": [
+        "Abuela1.jpeg",
+        "Abuela2.jpeg",
+        "Abuela3.jpeg"
+      ]
     },
     {
-      "titulo": "Abuela",
-      "foto": "Abuela2.jpeg"
+      "nombre": "Aurora",
+      "fotos": [
+        "Aurora1.jpeg",
+        "Aurora2.jpeg",
+        "Aurora3.jpeg"
+      ]
     },
     {
-      "titulo": "Abuela",
-      "foto": "Abuela3.jpeg"
+      "nombre": "Backstage",
+      "fotos": [
+        "Backstage1.jpeg",
+        "Backstage2.jpeg",
+        "Backstage3.jpeg"
+      ]
     },
     {
-      "titulo": "Aurora",
-      "foto": "Aurora1.jpeg"
+      "nombre": "Director",
+      "fotos": [
+        "Director1.jpeg",
+        "Director2.jpeg",
+        "Director3.jpeg"
+      ]
     },
     {
-      "titulo": "Backstage",
-      "foto": "Backstage1.jpeg"
+      "nombre": "Elvira",
+      "fotos": [
+        "Elvira1.jpeg",
+        "Elvira2.jpeg"
+      ]
     },
     {
-      "titulo": "Backstage",
-      "foto": "Backstage2.jpeg"
+      "nombre": "Estela",
+      "fotos": [
+        "Estela1.jpeg"
+      ]
     },
     {
-      "titulo": "Backstage",
-      "foto": "Backstage3.jpeg"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage4.jpeg"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage5.jpeg"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage6.jpeg"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage7.jpeg"
-    },
-    {
-      "titulo": "Backstage",
-      "foto": "Backstage8.jpeg"
-    },
-    {
-      "titulo": "Director",
-      "foto": "Director1.jpeg"
-    },
-    {
-      "titulo": "Director",
-      "foto": "Director2.jpeg"
-    },
-    {
-      "titulo": "Director",
-      "foto": "Director3.jpeg"
-    },
-    {
-      "titulo": "Laura",
-      "foto": "Laura1.jpeg"
-    },
-    {
-      "titulo": "Laura",
-      "foto": "Laura2.jpeg"
-    },
-    {
-      "titulo": "Aurora",
-      "foto": "aurora2.jpeg"
-    },
-    {
-      "titulo": "Aurora",
-      "foto": "aurora3.jpeg"
-    },
-    {
-      "titulo": "Elvira",
-      "foto": "elvira1.jpeg"
-    },
-    {
-      "titulo": "Elvira",
-      "foto": "elvira2.jpeg"
-    },
-    {
-      "titulo": "Estela",
-      "foto": "estela1.jpeg"
+      "nombre": "Laura",
+      "fotos": [
+        "Laura1.jpeg",
+        "Laura2.jpeg"
+      ]
     }
-  ]
+  ],
+  "backstages": []
 }

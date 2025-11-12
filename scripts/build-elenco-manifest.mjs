@@ -28,16 +28,14 @@ async function main(){
   const DIR_B_ALT = path.join(ROOT, 'Backstage'); // Backstage en raíz del proyecto
   const OUT   = path.join(DIR_P, 'elenco.manifest.json');
 
-  // Recorrer personajes de forma recursiva, excluyendo carpetas de backstage
+  // Recorrer de forma recursiva y devolver todos los archivos de imagen
   async function walk(dir, rel=''){
     let out=[];
     let list;
     try { list = await fs.readdir(dir, { withFileTypes:true }); } catch { return out; }
     for(const e of list){
       const name = e.name;
-      const lower = name.toLowerCase();
       if(e.isDirectory()){
-        if(lower === 'backstage' || lower === 'backstage teatro') continue;
         const subRel = path.join(rel, name);
         out = out.concat(await walk(path.join(dir, name), subRel));
       } else if(e.isFile() && IMG_RE.test(name)){
@@ -47,15 +45,29 @@ async function main(){
     }
     return out;
   }
-  const files = await walk(DIR_P);
-  const backs1 = await list(DIR_B);
-  const backs2 = await list(DIR_B2);
-  const backs3 = await list(DIR_B_ALT);
-  const backs = Array.from(new Set([...(backs1||[]), ...(backs2||[]), ...(backs3||[])])).sort();
+  const allFiles = await walk(DIR_P);
+
+  // Detectar listas específicas
+  const inDir = (p, d) => p.split('/')[0].toLowerCase() === d.toLowerCase();
+  const baseName = p => p.split('/').pop();
+
+  // Regla especial: si existen archivos en 'backstage teatro', separar por prefijo de nombre
+  const btFiles = allFiles.filter(p => inDir(p, 'backstage teatro'));
+  const btBacks = btFiles.filter(f => /^backstage\b/i.test(baseName(f))).map(baseName);
+  const btPers  = btFiles.filter(f => !/^backstage\b/i.test(baseName(f))).map(baseName);
+
+  // Archivos en otras ubicaciones
+  const other = allFiles.filter(p => !inDir(p, 'backstage teatro'));
+  const bsBacks = other.filter(p => inDir(p, 'Backstage')).map(baseName);
+  const persOther = other.filter(p => !inDir(p, 'Backstage')).map(baseName);
+
+  // Consolidar
+  const personFiles = Array.from(new Set([...btPers, ...persOther]));
+  const backs = Array.from(new Set([...btBacks, ...bsBacks])).sort();
 
   // agrupar por base (Abuela, Aurora, Director, etc.)
   const map = new Map();
-  for (const f of files) { const b=baseFrom(f); if(!map.has(b)) map.set(b,[]); map.get(b).push(f); }
+  for (const f of personFiles) { const b=baseFrom(f); if(!map.has(b)) map.set(b,[]); map.get(b).push(f); }
 
   const personajes = [...map.entries()].map(([nombre, fotos])=>({ nombre, fotos:fotos.sort().slice(0,3) }))
     .sort((a,b)=>a.nombre.localeCompare(b.nombre));

@@ -250,7 +250,11 @@
         rail.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
       }
       function goToVirtual(vi, smooth=true){ goToReal(virtualToReal(vi), smooth); }
-      function updateTabs(){ const isP = vIndex < NP; tabP.setAttribute('aria-selected', String(isP)); tabB.setAttribute('aria-selected', String(!isP)); }
+      function updateTabs(){
+        const isP = (NP > 0) && (vIndex < NP);
+        tabP.setAttribute('aria-selected', String(isP));
+        tabB.setAttribute('aria-selected', String(!isP));
+      }
 
       function render(){
         rail.innerHTML = ''; if(N===0) return;
